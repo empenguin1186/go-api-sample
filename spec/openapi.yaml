@@ -1,0 +1,125 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: サンプルAPI
+servers:
+  - url: "http://localhost:8080/"
+paths:
+
+  /tweet/favorite:
+    get:
+      summary: ツイートごとのお気に入り数を取得
+      description: ツイートごとのお気に入り数を取得
+      operationId: AdminGetTweetFavoriteList
+      tags:
+        - 管理用
+      responses:
+        '200':
+          $ref: "#/components/responses/TweetFavorite"
+
+  /users/my/favorite:
+    get:
+      summary: お気に入りに登録したツイートIDを取得
+      operationId: GetFavorite
+      tags:
+        - ツイート店舗
+      responses:
+        '200':
+          $ref: "#/components/responses/Favorite"
+
+    post:
+      summary: ツイート店舗をお気に入りに登録
+      operationId: PostFavorite
+      tags:
+        - ツイート
+      requestBody:
+        $ref: "#/components/requestBodies/Favorite"
+      responses:
+        '200':
+          description: created
+
+  /users/my/favorite/{tweetId}:
+    delete:
+      summary: ツイート店舗をお気に入りから削除
+      operationId: DeleteFavorite
+      tags:
+        - ツイート店舗
+      parameters:
+        - $ref: "#/components/parameters/TweetId"
+      responses:
+        '204':
+          description: 正常に削除
+
+components:
+
+  schemas:
+    TweetId:
+      properties:
+        tweetId:
+          type: integer
+          format: int32
+    Favorite:
+      properties:
+        tweet_id:
+          description: ツイートID
+          type: integer
+          format: int32
+          example: 100
+        registered_at:
+          description: お気に入りに登録した日時
+          type: string
+          format: date-time
+          example: 2022-02-01T05-00-00+09:00
+    FavoriteList:
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Favorite"
+    TweetFavorite:
+      properties:
+        tweet_id:
+          type: integer
+          format: int64
+          example: 100
+        favorite:
+          type: integer
+          format: int64
+          example: 1
+    TweetFavoriteList:
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/TweetFavorite"
+  parameters:
+    TweetId:
+      name: tweetId
+      description: ツイートID
+      required: true
+      in: path
+      schema:
+        type: integer
+        format: int32
+
+  requestBodies:
+    Favorite:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TweetId"
+
+  responses:
+    Favorite:
+      description: 正常
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/FavoriteList"
+    TweetFavorite:
+      description: 正常
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TweetFavoriteList"
