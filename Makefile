@@ -18,6 +18,10 @@ create-migrations:
 	docker run -v "$(CURDIR)/migrations:/migrations" migrate/migrate \
 	create -ext sql -dir migrations -seq create_favorite_table
 
-run-migrations:
+migrations-up:
 	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
 	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" up 2
+
+migrations-down:
+	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
+	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" down 2
