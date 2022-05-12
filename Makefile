@@ -1,4 +1,4 @@
-.PHONY: run codegen docker-compose create-migrations run-migrations
+.PHONY: run codegen docker-compose create-migrations run-migration
 
 include .env
 
@@ -18,10 +18,8 @@ create-migrations:
 	docker run -v "$(CURDIR)/migrations:/migrations" migrate/migrate \
 	create -ext sql -dir migrations -seq create_favorite_table
 
-migrations-up:
+OPERATION = up
+MIGRATION_NUM = 1
+run-migration:
 	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
-	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" up 1
-
-migrations-down:
-	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
-	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" down 1
+	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" $(OPERATION) $(MIGRATION_NUM)
