@@ -20,8 +20,8 @@ create-migrations:
 
 migrations-up:
 	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
-	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" up 2
+	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" up 1
 
 migrations-down:
 	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
-	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" down 2
+	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/sample?sslmode=disable" down 1
