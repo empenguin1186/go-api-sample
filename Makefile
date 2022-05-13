@@ -22,4 +22,4 @@ OPERATION = up
 MIGRATION_NUM = 1
 run-migration:
 	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
-	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:15432/${POSTGRES_DB}?sslmode=disable" $(OPERATION) $(MIGRATION_NUM)
+	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable" $(OPERATION) $(MIGRATION_NUM)
