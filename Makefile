@@ -20,6 +20,7 @@ create-migrations:
 
 OPERATION = up
 MIGRATION_NUM = 1
+.SILENT:
 run-migration:
 	docker run -v "$(CURDIR)/migrations:/migrations" --network host migrate/migrate \
 	-path=/migrations/ -database "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable" $(OPERATION) $(MIGRATION_NUM)
