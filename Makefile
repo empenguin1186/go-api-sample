@@ -1,4 +1,4 @@
-.PHONY: run codegen docker-compose create-migrations run-migration
+.PHONY: run codegen docker-compose create-migrations run-migration database-data-dump database-schema-dump
 
 include .env
 
