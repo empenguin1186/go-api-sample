@@ -1,9 +1,13 @@
-.PHONY: run codegen docker-compose create-migrations run-migration database-data-dump database-schema-dump
+.PHONY: run build codegen docker-compose create-migrations run-migration database-data-dump database-schema-dump
 
 include .env
 
 run:
 	go run cmd/server.go
+
+build:
+	rm -f ./server
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-d -s -w" -o . ./cmd/server.go
 
 codegen:
 	docker run --rm -v "$(CURDIR):/app" openapitools/openapi-generator-cli generate \
@@ -27,8 +31,8 @@ run-migration:
 
 FILE_DATA_NAME = sample.data.dump
 database-data-dump:
-	docker run -v "$(CURDIR)/dump:/dump" -it --rm --network host postgres:${POSTGRES_VERSION} pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -v -a -f /dump/$(FILE_DATA_NAME) -W
+	docker run -v "$(CURDIR):/dump" -it --rm --network host postgres:${POSTGRES_VERSION} pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -v -a -f /dump/$(FILE_DATA_NAME) -W
 
 FILE_SCHEMA_NAME = sample.schema.dump
 database-schema-dump:
-	docker run -v "$(CURDIR)/dump:/dump" -it --rm --network host postgres:${POSTGRES_VERSION} pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -v -s -f /dump/$(FILE_SCHEMA_NAME) -W
+	docker run -v "$(CURDIR):/dump" -it --rm --network host postgres:${POSTGRES_VERSION} pg_dump -h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -v -s -f /dump/$(FILE_SCHEMA_NAME) -W
