@@ -10,15 +10,26 @@
 package main
 
 import (
+	"fmt"
+	"github.com/empenguin1186/go-api-sample/infra"
 	"github.com/empenguin1186/go-api-sample/presentation"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
 	log.Printf("Server started")
 
-	DefaultApiService := presentation.NewDefaultApiService()
+	db, tx, err := infra.NewPostgre()
+	if err != nil {
+		fmt.Println("database error occurred.")
+		os.Exit(1)
+	}
+
+	favoriteRepository := infra.NewFavoriteRepositoryImpl(db, tx)
+
+	DefaultApiService := presentation.NewDefaultApiService(favoriteRepository)
 	DefaultApiController := presentation.NewDefaultApiController(DefaultApiService)
 
 	router := presentation.NewRouter(DefaultApiController)

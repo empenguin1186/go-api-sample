@@ -12,6 +12,7 @@ package presentation
 import (
 	"context"
 	"errors"
+	"github.com/empenguin1186/go-api-sample/domain/repository"
 	"net/http"
 )
 
@@ -19,11 +20,12 @@ import (
 // This service should implement the business logic for every endpoint for the DefaultApi API.
 // Include any external packages or services that will be required by this service.
 type DefaultApiService struct {
+	favoriteRepository repository.FavoriteRepository
 }
 
 // NewDefaultApiService creates a default api service
-func NewDefaultApiService() DefaultApiServicer {
-	return &DefaultApiService{}
+func NewDefaultApiService(favoriteRepository repository.FavoriteRepository) DefaultApiServicer {
+	return &DefaultApiService{favoriteRepository}
 }
 
 // AdminGetTweetFavoriteList - ツイートごとのお気に入り数を取得
