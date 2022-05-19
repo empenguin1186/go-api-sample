@@ -22,13 +22,13 @@ paths:
       summary: お気に入りに登録したツイートIDを取得
       operationId: GetFavorite
       tags:
-        - ツイート店舗
+        - ツイート
       responses:
         '200':
           $ref: "#/components/responses/Favorite"
 
     post:
-      summary: ツイート店舗をお気に入りに登録
+      summary: ツイートをお気に入りに登録
       operationId: PostFavorite
       tags:
         - ツイート
@@ -40,10 +40,10 @@ paths:
 
   /users/my/favorite/{tweetId}:
     delete:
-      summary: ツイート店舗をお気に入りから削除
+      summary: ツイートをお気に入りから削除
       operationId: DeleteFavorite
       tags:
-        - ツイート店舗
+        - ツイート
       parameters:
         - $ref: "#/components/parameters/TweetId"
       responses:
@@ -56,15 +56,13 @@ components:
     TweetId:
       properties:
         tweetId:
-          type: integer
-          format: int32
+          type: string
     Favorite:
       properties:
         tweet_id:
           description: ツイートID
-          type: integer
-          format: int32
-          example: 100
+          type: string
+          example: testtest0001
         registered_at:
           description: お気に入りに登録した日時
           type: string
@@ -79,9 +77,8 @@ components:
     TweetFavorite:
       properties:
         tweet_id:
-          type: integer
-          format: int64
-          example: 100
+          type: string
+          example: testtest0001
         favorite:
           type: integer
           format: int64
@@ -99,8 +96,7 @@ components:
       required: true
       in: path
       schema:
-        type: integer
-        format: int32
+        type: string
 
   requestBodies:
     Favorite:

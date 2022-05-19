@@ -16,7 +16,7 @@ import (
 type Favorite struct {
 
 	// ツイートID
-	TweetId int32 `json:"tweet_id,omitempty"`
+	TweetId string `json:"tweet_id,omitempty"`
 
 	// お気に入りに登録した日時
 	RegisteredAt time.Time `json:"registered_at,omitempty"`

@@ -10,7 +10,7 @@
 package presentation
 
 type TweetFavorite struct {
-	TweetId int64 `json:"tweet_id,omitempty"`
+	TweetId string `json:"tweet_id,omitempty"`
 
 	Favorite int64 `json:"favorite,omitempty"`
 }

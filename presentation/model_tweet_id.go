@@ -10,7 +10,7 @@
 package presentation
 
 type TweetId struct {
-	TweetId int32 `json:"tweetId,omitempty"`
+	TweetId string `json:"tweetId,omitempty"`
 }
 
 // AssertTweetIdRequired checks if the required fields are not zero-ed
