@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/empenguin1186/go-api-sample/domain/model"
+	_ "github.com/lib/pq"
 	"log"
 	"time"
 )
@@ -24,6 +25,7 @@ func (f *FavoriteRepositoryImpl) SelectById(tweetId string) ([]model.Favorite, e
 	query := fmt.Sprintf("select tweet_id, to_json(registered_at) from favorite where tweet_id = '%s'", tweetId)
 	data, err := f.db.Query(query)
 	if err != nil {
+		log.Printf("datastore get favorite error; %v", err)
 		return []model.Favorite{}, err
 	}
 	favorite := model.Favorite{}
@@ -31,6 +33,7 @@ func (f *FavoriteRepositoryImpl) SelectById(tweetId string) ([]model.Favorite, e
 	for data.Next() {
 		err = data.Scan(&favorite.TweetId, &favorite.RegisteredAt)
 		if err != nil {
+			log.Printf("datastore parse favorite error; %v", err)
 			return []model.Favorite{}, err
 		}
 		result = append(result, favorite)

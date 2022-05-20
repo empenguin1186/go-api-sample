@@ -90,7 +90,7 @@ func (c *DefaultApiController) AdminGetTweetFavoriteList(w http.ResponseWriter, 
 
 }
 
-// DeleteFavorite - ツイート店舗をお気に入りから削除
+// DeleteFavorite - ツイートをお気に入りから削除
 func (c *DefaultApiController) DeleteFavorite(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	tweetIdParam, err := parseInt32Parameter(params["tweetId"], true)
@@ -123,7 +123,7 @@ func (c *DefaultApiController) GetFavorite(w http.ResponseWriter, r *http.Reques
 
 }
 
-// PostFavorite - ツイート店舗をお気に入りに登録
+// PostFavorite - ツイートをお気に入りに登録
 func (c *DefaultApiController) PostFavorite(w http.ResponseWriter, r *http.Request) {
 	tweetIdParam := TweetId{}
 	d := json.NewDecoder(r.Body)

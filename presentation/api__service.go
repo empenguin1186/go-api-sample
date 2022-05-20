@@ -52,22 +52,22 @@ func (s *DefaultApiService) DeleteFavorite(ctx context.Context, tweetId int32) (
 
 // GetFavorite - お気に入りに登録したツイートIDを取得
 func (s *DefaultApiService) GetFavorite(ctx context.Context) (ImplResponse, error) {
-	// TODO - update GetFavorite with the required logic for this service method.
-	// Add api__service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
-	//TODO: Uncomment the next line to return response Response(200, FavoriteList{}) or use other options such as http.Ok ...
-	//return Response(200, FavoriteList{}), nil
+	favorites, err := s.favoriteRepository.SelectById("testtest0001")
+	if err != nil {
+		return Response(http.StatusInternalServerError, nil), errors.New("failed to get favorite")
+	}
 
-	return Response(http.StatusNotImplemented, nil), errors.New("GetFavorite method not implemented")
+	return Response(http.StatusOK, favorites), nil
 }
 
 // PostFavorite - ツイート店舗をお気に入りに登録
 func (s *DefaultApiService) PostFavorite(ctx context.Context, tweetId TweetId) (ImplResponse, error) {
-	// TODO - update PostFavorite with the required logic for this service method.
-	// Add api__service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
 
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
+	err := s.favoriteRepository.InsertFavorite(tweetId.TweetId)
+	if err != nil {
+		return Response(http.StatusInternalServerError, nil), errors.New("failed to post favorite")
+	}
 
-	return Response(http.StatusNotImplemented, nil), errors.New("PostFavorite method not implemented")
+	return Response(http.StatusCreated, nil), nil
 }

@@ -23,7 +23,7 @@ func main() {
 
 	db, tx, err := infra.NewPostgre()
 	if err != nil {
-		fmt.Println("database error occurred.")
+		fmt.Printf("database error occurred. %v", err)
 		os.Exit(1)
 	}
 
