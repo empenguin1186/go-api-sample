@@ -1,7 +1,6 @@
 package infra
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/empenguin1186/go-api-sample/domain/model"
 	_ "github.com/lib/pq"
@@ -10,20 +9,17 @@ import (
 )
 
 type FavoriteRepositoryImpl struct {
-	db *sql.DB
-	tx *sql.Tx
+	dataSource *DataSource
 }
 
-func NewFavoriteRepositoryImpl(db *sql.DB, tx *sql.Tx) *FavoriteRepositoryImpl {
+func NewFavoriteRepositoryImpl(dataSource *DataSource) *FavoriteRepositoryImpl {
 	return &FavoriteRepositoryImpl{
-		db: db,
-		tx: tx,
+		dataSource: dataSource,
 	}
 }
 
 func (f *FavoriteRepositoryImpl) SelectById(tweetId string) ([]model.Favorite, error) {
-	query := fmt.Sprintf("select tweet_id, to_json(registered_at) from favorite where tweet_id = '%s'", tweetId)
-	data, err := f.db.Query(query)
+	data, err := f.dataSource.Db.Query("select tweet_id, registered_at from favorite where tweet_id = $1", tweetId)
 	if err != nil {
 		log.Printf("datastore get favorite error; %v", err)
 		return []model.Favorite{}, err
@@ -42,17 +38,20 @@ func (f *FavoriteRepositoryImpl) SelectById(tweetId string) ([]model.Favorite, e
 }
 
 func (f *FavoriteRepositoryImpl) InsertFavorite(tweetId string) error {
-	now := time.Now().Format("2006-01-02T15:04:05-07:00")
-	query, err := f.tx.Prepare("insert into favorite (tweet_id, registered_at) values ($1, $2)")
-	if err != nil {
-		log.Printf("datastore insert favorite error; %v", err)
-		return nil
-	}
-	defer query.Close()
+	f.dataSource.Begin()
+	defer f.dataSource.Commit()
 
-	_, err = query.Exec(tweetId, now)
+	stmt, err := f.dataSource.Tx.Prepare("insert into favorite (tweet_id, registered_at) values ($1, $2)")
 	if err != nil {
-		return fmt.Errorf("database failed")
+		log.Printf("failed to create sql statement. error = %v", err)
+		return fmt.Errorf("failed to create sql statement. caused by %v", err)
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(tweetId, time.Now().Format("Mon, 02 Jan 2006 15:04:05 JST"))
+	if err != nil {
+		log.Printf("failed to execute sql statement. error = %v", err)
+		return fmt.Errorf("failed to execute sql statement. caused by %v", err)
 	}
 	return nil
 }

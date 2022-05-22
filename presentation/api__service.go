@@ -53,7 +53,7 @@ func (s *DefaultApiService) DeleteFavorite(ctx context.Context, tweetId int32) (
 // GetFavorite - お気に入りに登録したツイートIDを取得
 func (s *DefaultApiService) GetFavorite(ctx context.Context) (ImplResponse, error) {
 
-	favorites, err := s.favoriteRepository.SelectById("testtest0001")
+	favorites, err := s.favoriteRepository.SelectById("testtest0013")
 	if err != nil {
 		return Response(http.StatusInternalServerError, nil), errors.New("failed to get favorite")
 	}

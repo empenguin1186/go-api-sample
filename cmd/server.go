@@ -27,7 +27,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	favoriteRepository := infra.NewFavoriteRepositoryImpl(db, tx)
+	dataSource := infra.NewDataSource(db, tx)
+	favoriteRepository := infra.NewFavoriteRepositoryImpl(dataSource)
 
 	DefaultApiService := presentation.NewDefaultApiService(favoriteRepository)
 	DefaultApiController := presentation.NewDefaultApiController(DefaultApiService)
