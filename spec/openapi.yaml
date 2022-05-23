@@ -36,6 +36,8 @@ paths:
         - ツイート
       requestBody:
         $ref: "#/components/requestBodies/Favorite"
+      parameters:
+        - $ref: "#/components/parameters/UserId"
       responses:
         '200':
           description: created
@@ -58,6 +60,10 @@ components:
     TweetId:
       properties:
         tweetId:
+          type: string
+    UserId:
+      properties:
+        userId:
           type: string
     Favorite:
       properties:
