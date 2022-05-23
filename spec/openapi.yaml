@@ -17,12 +17,14 @@ paths:
         '200':
           $ref: "#/components/responses/TweetFavorite"
 
-  /users/my/favorite:
+  /users/{userId}/favorite:
     get:
       summary: お気に入りに登録したツイートIDを取得
       operationId: GetFavorite
       tags:
         - ツイート
+      parameters:
+        - $ref: "#/components/parameters/UserId"
       responses:
         '200':
           $ref: "#/components/responses/Favorite"
@@ -93,6 +95,13 @@ components:
     TweetId:
       name: tweetId
       description: ツイートID
+      required: true
+      in: path
+      schema:
+        type: string
+    UserId:
+      name: userId
+      description: ユーザID
       required: true
       in: path
       schema:
